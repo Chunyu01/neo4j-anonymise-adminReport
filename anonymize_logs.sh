@@ -63,7 +63,7 @@ unzip -q "$ZIP_FILE" -d "$EXTRACT_DIR"
 
 # Step 3: Find and anonymize relevant files (e.g., neo4j.conf, .log files), excluding __MACOSX
 echo "Anonymizing IP addresses and domain names..."
-find "$EXTRACT_DIR" \( -name "*.conf" -o -name "*.log" \) ! -path "*/__MACOSX/*" ! -name ".*" | while read -r file; do
+find "$EXTRACT_DIR" \( -name "*.conf" -o -name "*.log*" \) ! -path "*/__MACOSX/*" ! -name ".*" | while read -r file; do
   echo "Processing $file..."
   anonymize_file "$file"
 done
