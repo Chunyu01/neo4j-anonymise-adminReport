@@ -26,11 +26,14 @@ anonymize_file() {
     if ($2 ~ /[0-9]{1,3}(\.[0-9]{1,3}){3}/) {
       ip = $2
       sub(/[0-9]{1,3}(\.[0-9]{1,3}){3}/, "'$(hash_value '"ip"')'", $2)
+      print $1"="$2
     } else if ($2 ~ /[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/) {
       domain = $2
       sub(/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/, "'$(hash_value '"domain"')'", $2)
+      print $1"="$2
+    } else {
+      print $0
     }
-    print $1"="$2
   }' "$file" > "$tempfile"
 
   # Replace the original file with the anonymized version
