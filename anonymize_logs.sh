@@ -37,6 +37,12 @@ anonymize_file() {
   mv "$tempfile" "$file"
 }
 
+# Function to remove trailing equals signs from lines
+remove_trailing_equals() {
+  local file="$1"
+  awk '/=$/ { sub(/=$/, ""); } { print }' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+}
+
 # Find the first .zip file in the current directory
 ZIP_FILE=$(find . -maxdepth 1 -name "*.zip" | head -n 1)
 
@@ -66,6 +72,7 @@ echo "Anonymizing IP addresses and domain names..."
 find "$EXTRACT_DIR" \( -name "*.conf" -o -name "*.log" \) ! -path "*/__MACOSX/*" ! -name ".*" | while read -r file; do
   echo "Processing $file..."
   anonymize_file "$file"
+  remove_trailing_equals "$file"  # Remove trailing equals signs
 done
 
 # Step 4: Repackage the anonymized files into a new zip file within the new folder
